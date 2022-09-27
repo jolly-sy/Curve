@@ -32,15 +32,19 @@ namespace curve {
 namespace mds {
 class MockChunkAllocator: public ChunkSegmentAllocator {
  public:
+    using PoolsetType = ::curve::mds::topology::PoolsetType;
+
     ~MockChunkAllocator() {}
     MOCK_METHOD4(AllocateChunkSegment, bool(SegmentSizeType,
       ChunkSizeType, offset_t, PageFileSegment*));
 
-    MOCK_METHOD5(AllocateChunkSegment, bool(FileType, SegmentSizeType,
-      ChunkSizeType, offset_t, PageFileSegment*));
-    MOCK_METHOD2(GetRemainingSpaceInLogicalPool,
+    MOCK_METHOD3(GetRemainingSpaceInLogicalPool,
     void(const std::vector <PoolIdType>&,
-    std::map<PoolIdType, double>*));
+    std::map<PoolIdType, double>*,
+    PoolsetType pType));
+
+    MOCK_METHOD6(AllocateChunkSegment, bool(FileType, SegmentSizeType,
+      ChunkSizeType, PoolsetType, offset_t, PageFileSegment*));
 };
 }  // namespace mds
 }  // namespace curve

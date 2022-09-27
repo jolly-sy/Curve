@@ -39,6 +39,7 @@ namespace topology {
 // a logical will be chosen following the policy (randomly or weighted)
 bool TopologyChunkAllocatorImpl::AllocateChunkRandomInSingleLogicalPool(
     curve::mds::FileType fileType,
+    curve::mds::topology::PoolsetType pType,
     uint32_t chunkNumber,
     ChunkSizeType chunkSize,
     std::vector<CopysetIdInfo> *infos) {
@@ -48,7 +49,7 @@ bool TopologyChunkAllocatorImpl::AllocateChunkRandomInSingleLogicalPool(
         return false;
     }
     PoolIdType logicalPoolChosenId = 0;
-    bool ret = ChooseSingleLogicalPool(fileType, &logicalPoolChosenId);
+    bool ret = ChooseSingleLogicalPool(fileType, pType, &logicalPoolChosenId);
     if (!ret) {
         LOG(ERROR) << "ChooseSingleLogicalPool fail, ret =  " << ret;
         return false;
@@ -76,6 +77,7 @@ bool TopologyChunkAllocatorImpl::AllocateChunkRandomInSingleLogicalPool(
 
 bool TopologyChunkAllocatorImpl::AllocateChunkRoundRobinInSingleLogicalPool(
     curve::mds::FileType fileType,
+    curve::mds::topology::PoolsetType pType,
     uint32_t chunkNumber,
     ChunkSizeType chunkSize,
     std::vector<CopysetIdInfo> *infos) {
@@ -85,7 +87,7 @@ bool TopologyChunkAllocatorImpl::AllocateChunkRoundRobinInSingleLogicalPool(
         return false;
     }
     PoolIdType logicalPoolChosenId = 0;
-    bool ret = ChooseSingleLogicalPool(fileType, &logicalPoolChosenId);
+    bool ret = ChooseSingleLogicalPool(fileType, pType, &logicalPoolChosenId);
     if (!ret) {
         LOG(ERROR) << "ChooseSingleLogicalPool fail, ret = false.";
         return false;
@@ -133,6 +135,7 @@ bool TopologyChunkAllocatorImpl::AllocateChunkRoundRobinInSingleLogicalPool(
 
 bool TopologyChunkAllocatorImpl::ChooseSingleLogicalPool(
     curve::mds::FileType fileType,
+    curve::mds::topology::PoolsetType pType,
     PoolIdType *poolOut) {
     std::vector<PoolIdType> logicalPools;
 
@@ -167,7 +170,7 @@ bool TopologyChunkAllocatorImpl::ChooseSingleLogicalPool(
     std::map<PoolIdType, double> poolWeightMap;
     std::vector<PoolIdType> poolToChoose;
     std::map<PoolIdType, double> poolsEnough;
-    GetRemainingSpaceInLogicalPool(logicalPools, &poolsEnough);
+    GetRemainingSpaceInLogicalPool(logicalPools, &poolsEnough, pType);
     for (auto pool : poolsEnough) {
         // choose logical pool according to its weight
         if (ChoosePoolPolicy::kWeight == policy_) {
@@ -188,7 +191,8 @@ bool TopologyChunkAllocatorImpl::ChooseSingleLogicalPool(
 
 void TopologyChunkAllocatorImpl::GetRemainingSpaceInLogicalPool(
         const std::vector<PoolIdType>& logicalPools,
-        std::map<PoolIdType, double>* enoughSpacePools) {
+        std::map<PoolIdType, double>* enoughSpacePools,
+        curve::mds::topology::PoolsetType pType) {
         for (auto pid : logicalPools) {
         LogicalPool lPool;
         if (!topology_->GetLogicalPool(pid, &lPool)) {
@@ -196,6 +200,12 @@ void TopologyChunkAllocatorImpl::GetRemainingSpaceInLogicalPool(
         }
         PhysicalPool pPool;
         if (!topology_->GetPhysicalPool(lPool.GetPhysicalPoolId(), &pPool)) {
+            continue;
+        }
+        PoolsetIdType poolsetId = pPool.GetPoolsetId();
+        Poolset poolset;
+        topology_->GetPoolset(poolsetId, &poolset);
+        if (poolset.GetType() != pType) {
             continue;
         }
         uint64_t diskCapacity = pPool.GetDiskCapacity();

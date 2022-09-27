@@ -75,11 +75,14 @@ class FackTopologyChunkAllocator: public TopologyChunkAllocator {
  public:
     using CopysetIdInfo = ::curve::mds::topology::CopysetIdInfo;
     using FileType = ::curve::mds::FileType;
+    using PoolsetType = ::curve::mds::topology::PoolsetType;
 
     FackTopologyChunkAllocator() {}
 
     bool AllocateChunkRandomInSingleLogicalPool(
-            FileType fileType, uint32_t chunkNumer,
+            FileType fileType,
+            PoolsetType pType,
+            uint32_t chunkNumer,
             ChunkSizeType chunkSize,
             std::vector<CopysetIdInfo> *infos) override {
         for (uint32_t i = 0; i != chunkNumer; i++) {
@@ -89,8 +92,8 @@ class FackTopologyChunkAllocator: public TopologyChunkAllocator {
         return true;
     }
     bool AllocateChunkRoundRobinInSingleLogicalPool(
-            FileType fileType, uint32_t chunkNumer,
-            ChunkSizeType chunkSize,
+            FileType fileType, PoolsetType pType,
+            uint32_t chunkNumer, ChunkSizeType chunkSize,
             std::vector<CopysetIdInfo> *infos) override {
         for (uint32_t i = 0; i != chunkNumer; i++) {
             CopysetIdInfo copysetIdInfo{0, i};
@@ -98,10 +101,12 @@ class FackTopologyChunkAllocator: public TopologyChunkAllocator {
         }
         return true;
     }
+
     void GetRemainingSpaceInLogicalPool(
         const std::vector<PoolIdType>& logicalPools,
-        std::map<PoolIdType, double>* enoughSpacePools) override {
-            for (auto i = logicalPools.begin(); i != logicalPools.end(); i++){
+        std::map<PoolIdType, double>* enoughSpacePools,
+        PoolsetType pType) override {
+            for (auto i = logicalPools.begin(); i != logicalPools.end(); i++) {
                 enoughSpacePools->insert(std::pair<PoolIdType,
                     double>(*i, 10*FACK_FILE_INTTIALIZE));
             }

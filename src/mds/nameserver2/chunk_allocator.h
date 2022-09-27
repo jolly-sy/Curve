@@ -32,6 +32,7 @@
 #include "src/mds/topology/topology_chunk_allocator.h"
 
 using ::curve::mds::topology::TopologyChunkAllocator;
+using ::curve::mds::topology::PoolsetType;
 
 namespace curve {
 namespace mds {
@@ -42,10 +43,13 @@ class ChunkSegmentAllocator {
 
     virtual bool AllocateChunkSegment(FileType type,
         SegmentSizeType segmentSize, ChunkSizeType chunkSize,
-        offset_t offset, PageFileSegment *segment) = 0;
+        PoolsetType pType, offset_t offset,
+        PageFileSegment *segment) = 0;
+
     virtual void GetRemainingSpaceInLogicalPool(
         const std::vector<PoolIdType>& logicalPools,
-        std::map<PoolIdType, double>* remianingSpace) = 0;
+        std::map<PoolIdType, double>* remianingSpace,
+        curve::mds::topology::PoolsetType pType) = 0;
 };
 
 
@@ -67,13 +71,15 @@ class ChunkSegmentAllocatorImpl: public ChunkSegmentAllocator {
 
     bool AllocateChunkSegment(FileType type,
         SegmentSizeType segmentSize, ChunkSizeType chunkSize,
-        offset_t offset, PageFileSegment *segment) override;
+        PoolsetType pType, offset_t offset,
+        PageFileSegment *segment) override;
 
     void GetRemainingSpaceInLogicalPool(
         const std::vector<PoolIdType>& logicalPools,
-        std::map<PoolIdType, double>* remianingSpace) {
+        std::map<PoolIdType, double>* remianingSpace,
+        curve::mds::topology::PoolsetType pType) {
             return topologyChunkAllocator_->GetRemainingSpaceInLogicalPool(
-                            logicalPools, remianingSpace);
+                            logicalPools, remianingSpace, pType);
         }
 
  private:

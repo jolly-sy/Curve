@@ -282,6 +282,7 @@ TEST_F(NameSpaceServiceTest, test1) {
 
     // 创建file1,owner1
     request.set_filename("/file1");
+    request.set_poolsetname("ssdPoolset1");
     request.set_owner("owner1");
     request.set_date(TimeUtility::GetTimeofDayUs());
     request.set_filetype(INODE_PAGEFILE);
@@ -297,6 +298,7 @@ TEST_F(NameSpaceServiceTest, test1) {
 
     cntl.Reset();
     request.set_filename("/file2");
+    request.set_poolsetname("ssdPoolset1");
     request.set_owner("owner2");
     request.set_date(TimeUtility::GetTimeofDayUs());
     request.set_filetype(INODE_PAGEFILE);
@@ -312,6 +314,7 @@ TEST_F(NameSpaceServiceTest, test1) {
 
     cntl.Reset();
     request.set_filename("/dir");
+    request.set_poolsetname("");
     request.set_owner("owner3");
     request.set_date(TimeUtility::GetTimeofDayUs());
     request.set_filetype(INODE_DIRECTORY);
@@ -327,6 +330,7 @@ TEST_F(NameSpaceServiceTest, test1) {
 
     cntl.Reset();
     request.set_filename("/dir/file3");
+    request.set_poolsetname("");
     request.set_owner("owner3");
     request.set_date(TimeUtility::GetTimeofDayUs());
     request.set_filetype(INODE_PAGEFILE);
@@ -343,6 +347,7 @@ TEST_F(NameSpaceServiceTest, test1) {
     // 在一个不存在的目录下创建文件，会失败 kFileNotExists
     cntl.Reset();
     request.set_filename("/dir4/file4");
+    request.set_poolsetname("ssdPoolset1");
     request.set_owner("owner4");
     request.set_date(TimeUtility::GetTimeofDayUs());
     request.set_filetype(INODE_PAGEFILE);
@@ -359,6 +364,7 @@ TEST_F(NameSpaceServiceTest, test1) {
     // 在一个文件下创建文件，会失败 kNotDirectory
     cntl.Reset();
     request.set_filename("/file2/file4");
+    request.set_poolsetname("ssdPoolset1");
     request.set_owner("owner2");
     request.set_date(TimeUtility::GetTimeofDayUs());
     request.set_filetype(INODE_PAGEFILE);
@@ -375,6 +381,7 @@ TEST_F(NameSpaceServiceTest, test1) {
     // 如果创建一个已经存在的文件，会创建失败kFileExists
     cntl.Reset();
     request.set_filename("/file2");
+    request.set_poolsetname("");
     request.set_owner("owner2");
     request.set_date(TimeUtility::GetTimeofDayUs());
     request.set_filetype(INODE_PAGEFILE);
@@ -391,6 +398,7 @@ TEST_F(NameSpaceServiceTest, test1) {
     // 如果创建一个已经存在的目录，会创建失败kFileExists
     cntl.Reset();
     request.set_filename("/dir");
+    request.set_poolsetname("ssdPoolset1");
     request.set_owner("owner3");
     request.set_date(TimeUtility::GetTimeofDayUs());
     request.set_filetype(INODE_DIRECTORY);
@@ -421,10 +429,12 @@ TEST_F(NameSpaceServiceTest, test1) {
 
     cntl.Reset();
     request.set_filename("/file4");
+    request.set_poolsetname("ssdPoolset1");
     request.set_owner("owner4");
     request.set_date(TimeUtility::GetTimeofDayUs());
     request.set_filetype(INODE_APPENDECFILE);
     request.set_filelength(fileLength);
+
     cntl.set_log_id(3);  // set by user
     stub.CreateFile(&cntl, &request, &response, NULL);
     if (!cntl.Failed()) {
@@ -439,6 +449,7 @@ TEST_F(NameSpaceServiceTest, test1) {
     request.set_date(TimeUtility::GetTimeofDayUs());
     request.set_filetype(INODE_SNAPSHOT_PAGEFILE);
     request.set_filelength(fileLength);
+
     cntl.set_log_id(3);  // set by user
     stub.CreateFile(&cntl, &request, &response, NULL);
     if (!cntl.Failed()) {
@@ -450,6 +461,7 @@ TEST_F(NameSpaceServiceTest, test1) {
     // 创建文件名不规范的文件会失败
     cntl.Reset();
     request.set_filename("/file4/");
+    request.set_poolsetname("ssdPoolset1");
     request.set_owner("owner4");
     request.set_date(TimeUtility::GetTimeofDayUs());
     request.set_filetype(INODE_PAGEFILE);
@@ -1171,6 +1183,7 @@ TEST_F(NameSpaceServiceTest, snapshottests) {
     uint64_t fileLength = kMiniFileLength;
 
     request.set_filename("/file1");
+    request.set_poolsetname("");
     request.set_owner("owner1");
     request.set_date(TimeUtility::GetTimeofDayUs());
     request.set_filetype(INODE_PAGEFILE);
@@ -1442,11 +1455,11 @@ TEST_F(NameSpaceServiceTest, deletefiletests) {
 
     cntl.Reset();
     request.set_filename("/dir1");
+    request.set_poolsetname("ssdPoolset1");
     request.set_owner("owner");
     request.set_date(TimeUtility::GetTimeofDayUs());
     request.set_filetype(INODE_DIRECTORY);
     request.set_filelength(0);
-
     cntl.set_log_id(3);  // set by user
     stub.CreateFile(&cntl, &request, &response, NULL);
     if (!cntl.Failed()) {
@@ -1457,6 +1470,7 @@ TEST_F(NameSpaceServiceTest, deletefiletests) {
 
     cntl.Reset();
     request.set_filename("/dir1/file2");
+    request.set_poolsetname("ssdPoolset1");
     request.set_owner("owner");
     request.set_date(TimeUtility::GetTimeofDayUs());
     request.set_filetype(INODE_PAGEFILE);
@@ -2145,6 +2159,7 @@ TEST_F(NameSpaceServiceTest, testRecoverFile) {
     createRequest.set_date(TimeUtility::GetTimeofDayUs());
     createRequest.set_filetype(INODE_DIRECTORY);
     createRequest.set_filelength(0);
+
     stub.CreateFile(&cntl, &createRequest, &createResponse, NULL);
     if (!cntl.Failed()) {
         ASSERT_EQ(createResponse.statuscode(), StatusCode::kOK);
@@ -2158,6 +2173,7 @@ TEST_F(NameSpaceServiceTest, testRecoverFile) {
     createRequest.set_date(TimeUtility::GetTimeofDayUs());
     createRequest.set_filetype(INODE_PAGEFILE);
     createRequest.set_filelength(fileLength);
+
     stub.CreateFile(&cntl, &createRequest, &createResponse, NULL);
     if (!cntl.Failed()) {
         ASSERT_EQ(createResponse.statuscode(), StatusCode::kOK);
@@ -2339,6 +2355,7 @@ TEST_F(NameSpaceServiceTest, testRecoverFile) {
     createRequest.set_date(TimeUtility::GetTimeofDayUs());
     createRequest.set_filetype(INODE_PAGEFILE);
     createRequest.set_filelength(fileLength);
+
     stub.CreateFile(&cntl, &createRequest, &createResponse, NULL);
     if (!cntl.Failed()) {
         ASSERT_EQ(createResponse.statuscode(), StatusCode::kOK);
