@@ -23,6 +23,7 @@ package config
 
 import (
 	"strings"
+	"time"
 
 	"github.com/gookit/color"
 	cmderror "github.com/opencurve/curve/tools-v2/internal/error"
@@ -47,6 +48,8 @@ const (
 	CURVEBS_PASSWORD           = "password"
 	VIPER_CURVEBS_PASSWORD     = "curvebs.root.password"
 	CURVEBS_DEFAULT_PASSWORD   = "root_password"
+	CURVEBS_CLUSTERMAP         = "bsClusterMap"
+	VIPER_CURVEBS_CLUSTERMAP   = "curvebs.clustermap"
 )
 
 var (
@@ -62,6 +65,7 @@ var (
 		CURVEBS_USER:         VIPER_CURVEBS_USER,
 		CURVEBS_PASSWORD:     VIPER_CURVEBS_PASSWORD,
 		CURVEBS_ETCDADDR:     VIPER_CURVEBS_ETCDADDR,
+		CURVEBS_CLUSTERMAP:   VIPER_CURVEBS_CLUSTERMAP,
 	}
 
 	BSFLAG2DEFAULT = map[string]interface{}{
@@ -187,4 +191,28 @@ func GetBsMdsAddrSlice(cmd *cobra.Command) ([]string, *cmderror.CmdError) {
 
 func GetBsMdsDummyAddrSlice(cmd *cobra.Command) ([]string, *cmderror.CmdError) {
 	return GetBsAddrSlice(cmd, CURVEBS_MDSDUMMYADDR)
+}
+
+func AddBsClusterMapRequiredFlag(cmd *cobra.Command) {
+	AddStringRequiredFlag(cmd, CURVEBS_CLUSTERMAP, "bsClusterMap")
+}
+
+func GetBsFlagDuration(cmd *cobra.Command, flagName string) time.Duration {
+	var value time.Duration
+	if cmd.Flag(flagName).Changed {
+		value, _ = cmd.Flags().GetDuration(flagName)
+	} else {
+		value = viper.GetDuration(BSFLAG2VIPER[flagName])
+	}
+	return value
+}
+
+func GetBsFlagInt32(cmd *cobra.Command, flagName string) int32 {
+	var value int32
+	if cmd.Flag(flagName).Changed {
+		value, _ = cmd.Flags().GetInt32(flagName)
+	} else {
+		value = viper.GetInt32(BSFLAG2VIPER[flagName])
+	}
+	return value
 }
