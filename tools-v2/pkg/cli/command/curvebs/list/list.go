@@ -25,6 +25,7 @@ package list
 import (
 	basecmd "github.com/opencurve/curve/tools-v2/pkg/cli/command"
 	logicalpool "github.com/opencurve/curve/tools-v2/pkg/cli/command/curvebs/list/logicalPool"
+	"github.com/opencurve/curve/tools-v2/pkg/cli/command/curvebs/list/maydamagedvolumes"
 	"github.com/opencurve/curve/tools-v2/pkg/cli/command/curvebs/list/server"
 	"github.com/spf13/cobra"
 )
@@ -39,6 +40,8 @@ func (listCmd *ListCommand) AddSubCommands() {
 	listCmd.Cmd.AddCommand(
 		logicalpool.NewLogicalPoolCommand(),
 		server.NewServerCommand(),
+		//topo.NewTopoCmd(),
+		maydamagedvolumes.NewMayDamVolCmd(),
 	)
 }
 

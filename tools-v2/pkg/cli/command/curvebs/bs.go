@@ -24,6 +24,7 @@ package curvebs
 
 import (
 	basecmd "github.com/opencurve/curve/tools-v2/pkg/cli/command"
+	"github.com/opencurve/curve/tools-v2/pkg/cli/command/curvebs/check"
 	"github.com/opencurve/curve/tools-v2/pkg/cli/command/curvebs/create"
 	"github.com/opencurve/curve/tools-v2/pkg/cli/command/curvebs/list"
 	"github.com/opencurve/curve/tools-v2/pkg/cli/command/curvebs/query"
@@ -43,6 +44,7 @@ func (bsCmd *CurveBsCommand) AddSubCommands() {
 		query.NewQueryCommand(),
 		status.NewStatusCommand(),
 		create.NewCreateCmd(),
+		check.NewCheckCmd(),
 	)
 }
 

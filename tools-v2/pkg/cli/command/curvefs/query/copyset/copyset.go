@@ -214,7 +214,7 @@ func (cCmd *CopysetCommand) RunCommand(cmd *cobra.Command, args []string) error 
 	cCmd.TableNew.SetAutoMergeCellsByColumnIndex(indexSlice)
 
 	list := cobrautil.ListMap2ListSortByKeys(cCmd.Rows, cCmd.Header, []string{
-		cobrautil.ROW_POOL_ID, cobrautil.ROW_LEADER_PEER, 
+		cobrautil.ROW_POOL_ID, cobrautil.ROW_LEADER_PEER,
 		cobrautil.ROW_COPYSET_ID,
 	})
 	cCmd.TableNew.AppendBulk(list)
