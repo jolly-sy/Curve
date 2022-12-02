@@ -91,23 +91,24 @@ func (csCmd *ConsistencyCmd) CheckChunkHash(csAddrs []string, lpid uint32, cid u
 				cksid := strconv.FormatUint(uint64(port-base), 10)
 				chunkserverIds = append(chunkserverIds, cksid)
 			}
+			cksShow := "chunkserver" + chunkserverIds[0] + "," + "chunkserver" + chunkserverIds[1] + "," + "chunkserver" + chunkserverIds[2]
+			row["host"] = addrs[0] + "\n" + addrs[1] + "\n" + addrs[2]
+			row["chunkserver"] = cksShow
 			row["copysetId"] = strconv.FormatUint(uint64(cid), 10)
 			row["groupId"] = strconv.FormatUint(gid, 10)
 			row["logicalpoolId"] = strconv.FormatUint(uint64(lpid), 10)
 			row["chunkId"] = strconv.FormatUint(chunkid, 10)
 			csCmd.errHashRows = append(csCmd.errHashRows, row)
 
-			list := cobrautil.ListMap2ListSortByKeys(csCmd.errHashRows, csCmd.Header, []string{
-				"host", "chunkserver", "copysetId", "groupId",
-			})
+			list := cobrautil.ListMap2ListSortByKeys(csCmd.errHashRows, csCmd.Header, []string{})
 			csCmd.TableNew.AppendBulk(list)
-			// fmt.Println(cid, gid, lpid, chunkid)
-			fmt.Println("copysetId: ", cid)
-			fmt.Println("groupId: ", gid)
-			fmt.Println("logicalPoolId: ", lpid)
-			fmt.Println("chunkId: ", chunkid)
-			fmt.Println("hosts: ", addrs)
-			fmt.Println("chunkserversId: ", chunkserverIds)
+
+			fmt.Println("copysetId:", cid)
+			fmt.Println("groupId:", gid)
+			fmt.Println("logicalPoolId:", lpid)
+			fmt.Println("chunkId:", chunkid)
+			fmt.Println("hosts:", addrs)
+			fmt.Println("chunkservers:", cksShow)
 			fmt.Println()
 			break
 		}

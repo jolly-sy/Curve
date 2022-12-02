@@ -402,6 +402,14 @@ var (
 	ErrBsApplyIndex = func() *CmdError {
 		return NewInternalCmdError(51, "apply index are not consistency")
 	}
+	ErrParseRaftState = func() *CmdError {
+		return NewInternalCmdError(52, "fail to parse %s! the line is: %s")
+	}
+
+	ErrChunkServerNotHealth = func() *CmdError {
+		return NewInternalCmdError(53, "Some copysets not found on chunkserver, may be tranfered, chunkserver is not healthy")
+	}
+
 	// http error
 	ErrHttpUnreadableResult = func() *CmdError {
 		return NewHttpResultCmdError(1, "http response is unreadable, the uri is: %s, the error is: %s")
@@ -598,7 +606,7 @@ var (
 		default:
 			message = fmt.Sprintf("create %s[%s], err: %s", topoType, name, statusCode.String())
 		}
-		return NewRpcReultCmdError(code, message)
+		return NewRpcReultCmdError(-code, message)
 	}
 	ErrListVolsOnDamagedCps = func(statusCode nameserver2.StatusCode) *CmdError {
 		var message string
@@ -620,7 +628,7 @@ var (
 		default:
 			message = fmt.Sprintf("get copysets in chunk server fail errCode: %s, chunkserver addr is %s", statusCode.String(), csAddr)
 		}
-		return NewRpcReultCmdError(code, message)
+		return NewRpcReultCmdError(-code, message)
 	}
 	ErrGetChunkServerListInCopySets = func(statusCode bs_statuscode.TopoStatusCode) *CmdError {
 		var message string
@@ -631,7 +639,7 @@ var (
 		default:
 			message = fmt.Sprintf("Get chunk server list in copysets fail errCode: %s", statusCode.String())
 		}
-		return NewRpcReultCmdError(code, message)
+		return NewRpcReultCmdError(-code, message)
 	}
 	ErrListChunkServers = func(statusCode bs_statuscode.TopoStatusCode) *CmdError {
 		var message string
@@ -642,7 +650,7 @@ var (
 		default:
 			message = fmt.Sprintf("list chunk servers fail errCode: %s", statusCode.String())
 		}
-		return NewRpcReultCmdError(code, message)
+		return NewRpcReultCmdError(-code, message)
 	}
 	ErrListPoolsets = func(statusCode bs_statuscode.TopoStatusCode) *CmdError {
 		var message string
@@ -653,7 +661,7 @@ var (
 		default:
 			message = fmt.Sprintf("list poolsets err: %s", statusCode.String())
 		}
-		return NewRpcReultCmdError(code, message)
+		return NewRpcReultCmdError(-code, message)
 	}
 	ErrListPhyPoolsInPst = func(statusCode bs_statuscode.TopoStatusCode) *CmdError {
 		var message string
@@ -664,7 +672,7 @@ var (
 		default:
 			message = fmt.Sprintf("list physicalpools in poolset err: %s", statusCode.String())
 		}
-		return NewRpcReultCmdError(code, message)
+		return NewRpcReultCmdError(-code, message)
 	}
 	ErrListZonesInPhyPool = func(statusCode bs_statuscode.TopoStatusCode) *CmdError {
 		var message string
@@ -675,7 +683,7 @@ var (
 		default:
 			message = fmt.Sprintf("list zones in physicalpool err: %s", statusCode.String())
 		}
-		return NewRpcReultCmdError(code, message)
+		return NewRpcReultCmdError(-code, message)
 	}
 	ErrListServers = func(statusCode bs_statuscode.TopoStatusCode) *CmdError {
 		var message string
@@ -686,7 +694,7 @@ var (
 		default:
 			message = fmt.Sprintf("list servers err: %s", statusCode.String())
 		}
-		return NewRpcReultCmdError(code, message)
+		return NewRpcReultCmdError(-code, message)
 	}
 
 	ErrListZones = func(statusCode bs_statuscode.TopoStatusCode) *CmdError {
@@ -698,7 +706,7 @@ var (
 		default:
 			message = fmt.Sprintf("list topology err: %s", statusCode.String())
 		}
-		return NewRpcReultCmdError(code, message)
+		return NewRpcReultCmdError(-code, message)
 	}
 
 	ErrDelServer = func(statusCode bs_statuscode.TopoStatusCode, topoType string, name string) *CmdError {
@@ -710,7 +718,7 @@ var (
 		default:
 			message = fmt.Sprintf("delete %s[%s], err: %s", topoType, name, statusCode.String())
 		}
-		return NewRpcReultCmdError(code, message)
+		return NewRpcReultCmdError(-code, message)
 	}
 
 	ErrDelZone = func(statusCode bs_statuscode.TopoStatusCode, topoType string, name string) *CmdError {
@@ -722,7 +730,7 @@ var (
 		default:
 			message = fmt.Sprintf("delete %s[%s], err: %s", topoType, name, statusCode.String())
 		}
-		return NewRpcReultCmdError(code, message)
+		return NewRpcReultCmdError(-code, message)
 	}
 
 	ErrDelPhyPool = func(statusCode bs_statuscode.TopoStatusCode, topoType string, name string) *CmdError {
@@ -734,7 +742,7 @@ var (
 		default:
 			message = fmt.Sprintf("delete %s[%s], err: %s", topoType, name, statusCode.String())
 		}
-		return NewRpcReultCmdError(code, message)
+		return NewRpcReultCmdError(-code, message)
 	}
 
 	ErrGetChunkServerListInCopySetsRpc = func(statusCode bs_statuscode.TopoStatusCode, logicalpoolId uint32) *CmdError {
@@ -746,7 +754,7 @@ var (
 		default:
 			message = fmt.Sprintf("the logicalpool id of copysets is %d, err: %s", logicalpoolId, statusCode.String())
 		}
-		return NewRpcReultCmdError(code, message)
+		return NewRpcReultCmdError(-code, message)
 	}
 
 	ErrBsGetChunkHash = func(scode bs_statuscode.ChunkStatusCode) *CmdError {
@@ -811,7 +819,7 @@ var (
 		default:
 			message = fmt.Sprintf("delete %s[%s], err: %s", topoType, name, statusCode.String())
 		}
-		return NewRpcReultCmdError(code, message)
+		return NewRpcReultCmdError(-code, message)
 	}
 
 	ErrBsGetSegInfo = func(statusCode bs_statuscode.GetSegmentRes) *CmdError {
@@ -830,5 +838,33 @@ var (
 			message = fmt.Sprintf("get segment info fail, err: %s", statusCode.String())
 		}
 		return NewRpcReultCmdError(code, message)
+	}
+	ErrBsGetChunkServer = func(statusCode bs_statuscode.TopoStatusCode) *CmdError {
+		var message string
+		code := int(statusCode)
+		switch statusCode {
+		case bs_statuscode.TopoStatusCode_Success:
+			message = "get chunkserver info successfully"
+		case bs_statuscode.TopoStatusCode_ChunkServerNotFound:
+			message = fmt.Sprintf("chunkserver not found, errCode is %s", statusCode.String())
+		default:
+			message = fmt.Sprintf("get chunkserver info fail, errCode is %s", statusCode.String())
+		}
+		return NewRpcReultCmdError(-code, message)
+	}
+	ErrBsGetRaftStatus = func(statusCode bs_statuscode.CsHealthStatus, csAddr string) *CmdError {
+		var message string
+		code := int(statusCode)
+		switch statusCode {
+		case bs_statuscode.CsHealthStatus_CpsHealthy:
+			message = "chunkserver is healthy"
+		case bs_statuscode.CsHealthStatus_CpsNotHealthy:
+			message = fmt.Sprintf("chunkserver is healthy, errCode is %s", statusCode.String())
+		case bs_statuscode.CsHealthStatus_CsNotOnline:
+			message = fmt.Sprintf("chunkserver is not online, csAddr is %s", csAddr)
+		default:
+			message = fmt.Sprintf("get chunkserver raft status fail, errCode is %s", statusCode.String())
+		}
+		return NewRpcReultCmdError(-code, message)
 	}
 )

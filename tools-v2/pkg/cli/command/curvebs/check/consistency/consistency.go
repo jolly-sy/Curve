@@ -28,7 +28,6 @@ import (
 	"time"
 
 	cmderror "github.com/opencurve/curve/tools-v2/internal/error"
-	cobrautil "github.com/opencurve/curve/tools-v2/internal/utils"
 	basecmd "github.com/opencurve/curve/tools-v2/pkg/cli/command"
 	"github.com/opencurve/curve/tools-v2/pkg/cli/command/curvebs/query/file"
 	"github.com/opencurve/curve/tools-v2/pkg/config"
@@ -73,7 +72,6 @@ type ConsistencyCmd struct {
 	//chunkHash
 	getChunkHashRpc *GetChunkHashRpc
 
-	errIdxRows  []map[string]string
 	errHashRows []map[string]string
 }
 
@@ -168,9 +166,6 @@ func (csCmd *ConsistencyCmd) Init(cmd *cobra.Command, args []string) error {
 	csCmd.lpid2cpIds, csCmd.cpId2lpId = csCmd.GenCopysetMappings(csCmd.filename)
 	header := []string{"host", "chunkserver", "copysetId", "groupId", "logicalpoolId", "chunkId"}
 	csCmd.SetHeader(header)
-	csCmd.TableNew.SetAutoMergeCellsByColumnIndex(cobrautil.GetIndexSlice(
-		csCmd.Header, []string{"host", "chunkserver", "copysetId", "groupId"},
-	))
 	return err1.ToError()
 }
 

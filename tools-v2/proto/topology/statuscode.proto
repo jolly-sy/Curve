@@ -71,4 +71,9 @@ enum ChunkStatusCode{
     EpochOld = 12;             // 请求中的epoch太老了
 }
 
-
+// chunkserver health status
+enum CsHealthStatus{
+    CpsHealthy = 0;      // chunkserver上的所有copyset健康
+    CpsNotHealthy = -1;  //chunkserver上的所有copyset不健康
+    CsNotOnline  = -2;  //chunkserver 不在线
+}

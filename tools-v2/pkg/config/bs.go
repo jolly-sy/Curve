@@ -34,30 +34,40 @@ import (
 
 const (
 	// curvebs
-	CURVEBS_MDSADDR            = "mdsaddr"
-	VIPER_CURVEBS_MDSADDR      = "curvebs.mdsAddr"
-	CURVEBS_MDSDUMMYADDR       = "mdsdummyaddr"
-	VIPER_CURVEBS_MDSDUMMYADDR = "curvebs.mdsDummyAddr"
-	CURVEBS_ETCDADDR           = "etcdaddr"
-	VIPER_CURVEBS_ETCDADDR     = "curvebs.etcdAddr"
-	CURVEBS_PATH               = "path"
-	VIPER_CURVEBS_PATH         = "curvebs.path"
-	CURVEBS_USER               = "user"
-	VIPER_CURVEBS_USER         = "curvebs.root.user"
-	CURVEBS_DEFAULT_USER       = "root"
-	CURVEBS_PASSWORD           = "password"
-	VIPER_CURVEBS_PASSWORD     = "curvebs.root.password"
-	CURVEBS_DEFAULT_PASSWORD   = "root_password"
-	CURVEBS_CLUSTERMAP         = "bsClusterMap"
-	VIPER_CURVEBS_CLUSTERMAP   = "curvebs.clustermap"
-	CURVEBS_FILENAME           = "filename"
-	VIPER_CURVEBS_FILENAME     = "curvebs.filename"
-	CURVEBS_HASH_CHECK         = "hashcheck"
-	VIPER_CURVEBS_HASH_CHECK   = "curvebs.hashcheck"
-	CURVEBS_CHUNK_SIZE         = "chunkSize"
-	VIPER_CURVEBS_CHUNK_SIZE   = "curvebs.chunkSize"
-	CURVEBS_PORT               = "port"
-	VIPER_CURVEBS_PORT         = "curvebs.port"
+	CURVEBS_MDSADDR                = "mdsaddr"
+	VIPER_CURVEBS_MDSADDR          = "curvebs.mdsAddr"
+	CURVEBS_MDSDUMMYADDR           = "mdsdummyaddr"
+	VIPER_CURVEBS_MDSDUMMYADDR     = "curvebs.mdsDummyAddr"
+	CURVEBS_ETCDADDR               = "etcdaddr"
+	VIPER_CURVEBS_ETCDADDR         = "curvebs.etcdAddr"
+	CURVEBS_PATH                   = "path"
+	VIPER_CURVEBS_PATH             = "curvebs.path"
+	CURVEBS_USER                   = "user"
+	VIPER_CURVEBS_USER             = "curvebs.root.user"
+	CURVEBS_DEFAULT_USER           = "root"
+	CURVEBS_PASSWORD               = "password"
+	VIPER_CURVEBS_PASSWORD         = "curvebs.root.password"
+	CURVEBS_DEFAULT_PASSWORD       = "root_password"
+	CURVEBS_CLUSTERMAP             = "bsClusterMap"
+	VIPER_CURVEBS_CLUSTERMAP       = "curvebs.clustermap"
+	CURVEBS_FILENAME               = "filename"
+	VIPER_CURVEBS_FILENAME         = "curvebs.filename"
+	CURVEBS_HASH_CHECK             = "hashcheck"
+	VIPER_CURVEBS_HASH_CHECK       = "curvebs.hashcheck"
+	CURVEBS_CHUNK_SIZE             = "chunkSize"
+	VIPER_CURVEBS_CHUNK_SIZE       = "curvebs.chunkSize"
+	CURVEBS_PORT                   = "port"
+	VIPER_CURVEBS_PORT             = "curvebs.port"
+	CURVEBS_CHUNKSERVER_ID         = "csId"
+	VIPER_CURVEBS_CHUNKSERVER_ID   = "curvebs.csId"
+	CURVEBS_CHUNKSERVER_ADDR       = "csAddr"
+	VIPER_CURVEBS_CHUNKSERVER_ADDR = "curvebs.csAddr"
+	CURVEBS_MARGIN                 = "margin"
+	VIPER_CURVEBS_MARGIN           = "curvebs.margin"
+	CURVEBS_DEFAULT_MARGIN         = int32(1000)
+	CURVEBS_DETAIL                 = "detail"
+	VIPER_CURVEBS_DETAIL           = "curvebs.detail"
+	CURVEBS_DEFAULT_DETAIL         = false
 )
 
 var (
@@ -67,23 +77,29 @@ var (
 		RPCRETRYTIMES: VIPER_GLOBALE_RPCRETRYTIMES,
 
 		// bs
-		CURVEBS_MDSADDR:      VIPER_CURVEBS_MDSADDR,
-		CURVEBS_MDSDUMMYADDR: VIPER_CURVEBS_MDSDUMMYADDR,
-		CURVEBS_PATH:         VIPER_CURVEBS_PATH,
-		CURVEBS_USER:         VIPER_CURVEBS_USER,
-		CURVEBS_PASSWORD:     VIPER_CURVEBS_PASSWORD,
-		CURVEBS_ETCDADDR:     VIPER_CURVEBS_ETCDADDR,
-		CURVEBS_CLUSTERMAP:   VIPER_CURVEBS_CLUSTERMAP,
-		CURVEBS_FILENAME:     VIPER_CURVEBS_FILENAME,
-		CURVEBS_HASH_CHECK:   VIPER_CURVEBS_HASH_CHECK,
-		CURVEBS_CHUNK_SIZE:   VIPER_CURVEBS_CHUNK_SIZE,
-		CURVEBS_PORT:         VIPER_CURVEBS_PORT,
+		CURVEBS_MDSADDR:          VIPER_CURVEBS_MDSADDR,
+		CURVEBS_MDSDUMMYADDR:     VIPER_CURVEBS_MDSDUMMYADDR,
+		CURVEBS_PATH:             VIPER_CURVEBS_PATH,
+		CURVEBS_USER:             VIPER_CURVEBS_USER,
+		CURVEBS_PASSWORD:         VIPER_CURVEBS_PASSWORD,
+		CURVEBS_ETCDADDR:         VIPER_CURVEBS_ETCDADDR,
+		CURVEBS_CLUSTERMAP:       VIPER_CURVEBS_CLUSTERMAP,
+		CURVEBS_FILENAME:         VIPER_CURVEBS_FILENAME,
+		CURVEBS_HASH_CHECK:       VIPER_CURVEBS_HASH_CHECK,
+		CURVEBS_CHUNK_SIZE:       VIPER_CURVEBS_CHUNK_SIZE,
+		CURVEBS_PORT:             VIPER_CURVEBS_PORT,
+		CURVEBS_CHUNKSERVER_ID:   VIPER_CURVEBS_CHUNKSERVER_ID,
+		CURVEBS_CHUNKSERVER_ADDR: VIPER_CURVEBS_CHUNKSERVER_ADDR,
+		CURVEBS_MARGIN:           VIPER_CURVEBS_MARGIN,
+		CURVEBS_DETAIL:           VIPER_CURVEBS_DETAIL,
 	}
 
 	BSFLAG2DEFAULT = map[string]interface{}{
 		// bs
 		CURVEBS_USER:     CURVEBS_DEFAULT_USER,
 		CURVEBS_PASSWORD: CURVEBS_DEFAULT_PASSWORD,
+		CURVEBS_MARGIN:   CURVEBS_DEFAULT_MARGIN,
+		CURVEBS_DETAIL:   CURVEBS_DEFAULT_DETAIL,
 	}
 )
 
@@ -102,11 +118,23 @@ func AddBsStringSliceOptionFlag(cmd *cobra.Command, name string, usage string) {
 }
 
 func AddBsStringOptionFlag(cmd *cobra.Command, name string, usage string) {
-	defaultValue := FLAG2DEFAULT[name]
+	defaultValue := BSFLAG2DEFAULT[name]
 	if defaultValue == nil {
 		defaultValue = ""
 	}
 	cmd.Flags().String(name, defaultValue.(string), usage)
+	err := viper.BindPFlag(BSFLAG2VIPER[name], cmd.Flags().Lookup(name))
+	if err != nil {
+		cobra.CheckErr(err)
+	}
+}
+
+func AddBsInt32OptionFlag(cmd *cobra.Command, name string, usage string) {
+	defaultValue := BSFLAG2DEFAULT[name]
+	if defaultValue == nil {
+		defaultValue = int32(0)
+	}
+	cmd.Flags().Int32(name, defaultValue.(int32), usage)
 	err := viper.BindPFlag(BSFLAG2VIPER[name], cmd.Flags().Lookup(name))
 	if err != nil {
 		cobra.CheckErr(err)
@@ -147,6 +175,22 @@ func AddBsPasswordOptionFlag(cmd *cobra.Command) {
 	AddBsStringOptionFlag(cmd, CURVEBS_PASSWORD, "user password")
 }
 
+func AddBsChunkServerIdFlag(cmd *cobra.Command) {
+	AddBsStringOptionFlag(cmd, CURVEBS_CHUNKSERVER_ID, "chunkserver id")
+}
+
+func AddBsChunkServerAddrFlag(cmd *cobra.Command) {
+	AddBsStringOptionFlag(cmd, CURVEBS_CHUNKSERVER_ADDR, "chunkserver addr")
+}
+
+func AddBsMarginFlag(cmd *cobra.Command) {
+	AddBsInt32OptionFlag(cmd, CURVEBS_MARGIN, "margin")
+}
+
+func AddBsDetailFlag(cmd *cobra.Command) {
+	AddBsBoolOptionFlag(cmd, CURVEBS_DETAIL, "detail")
+}
+
 // etcd
 func AddBsEtcdAddrFlag(cmd *cobra.Command) {
 	AddBsStringOptionFlag(cmd, CURVEBS_ETCDADDR, "etcd address, should be like 127.0.0.1:8700,127.0.0.1:8701,127.0.0.1:8702")
@@ -156,6 +200,18 @@ func AddBsEtcdAddrFlag(cmd *cobra.Command) {
 func AddBsBoolRequiredFlag(cmd *cobra.Command, name string, usage string) {
 	cmd.Flags().Bool(name, false, usage+color.Red.Sprint("[required]"))
 	cmd.MarkFlagRequired(name)
+	err := viper.BindPFlag(BSFLAG2VIPER[name], cmd.Flags().Lookup(name))
+	if err != nil {
+		cobra.CheckErr(err)
+	}
+}
+
+func AddBsBoolOptionFlag(cmd *cobra.Command, name string, usage string) {
+	defaultValue := BSFLAG2DEFAULT[name]
+	if defaultValue == nil {
+		defaultValue = false
+	}
+	cmd.Flags().Bool(name, defaultValue.(bool), usage)
 	err := viper.BindPFlag(BSFLAG2VIPER[name], cmd.Flags().Lookup(name))
 	if err != nil {
 		cobra.CheckErr(err)
